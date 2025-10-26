@@ -5,7 +5,7 @@ import sys
 
 # Find analysis_lib folder
 script_path = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_path, '..', '..'))
+project_root = os.path.abspath(os.path.join(script_path, '..', '..', '..'))
 sys.path.append(project_root)
 
 from analysis_lib import workflow
