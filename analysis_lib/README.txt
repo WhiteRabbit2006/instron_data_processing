@@ -70,3 +70,26 @@ test_config = {
 
 if __name__ == "__main__":
     workflow.run_analysis_workflow(script_path, test_config)
+
+
+Configuration Reference:
+data_file_name: String. Name of the file in the data/ folder.
+test_recipe: List of dictionaries. Defines each phase with a name, end_time (seconds), and type ('AXIAL' or 'TORSIONAL').
+geometry: Dictionary. Sample dimensions in mm.
+plots: List of dictionaries, each defining a plot with the following keys:
+type: 'static', 'animated', or ['static', 'animated'].
+phases: List of phase names to plot. Use ['__full__'] for the entire test.
+x_col, y_col: Data types to plot (e.g., 'time', 'force', 'axial_stress').
+title, output_filename: Strings for plot labels. Can use placeholders like {phase_name}. Suffix is added automatically.
+x_units, y_units: (Optional) Force a specific unit (e.g., 'GPa', 's'). Defaults to auto-scaling.
+fit_line: (Static plots) True or False.
+fit_bounds: (Static plots) (lower, upper) tuple on the x-axis to define the linear fit region.
+duration_s, fps: (Animated plots) Target video length and frame rate. Defaults to 10s, 30fps.
+snap_x_to_zero, snap_y_to_zero: (Optional) False to prevent an axis from including 0. Defaults to True.
+
+Dependencies:
+pandas
+numpy
+matplotlib
+scipy
+FFmpeg: Must be installed on your system to save animated plots (.mp4).
