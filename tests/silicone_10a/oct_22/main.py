@@ -1,4 +1,4 @@
-# oct_22/main.py
+# silicone_10a/oct_22/main.py
 
 import os
 import sys

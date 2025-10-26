@@ -1,4 +1,4 @@
-# oct_24/main.py
+# latex_glove/oct_24/main.py
 
 import os
 import sys
