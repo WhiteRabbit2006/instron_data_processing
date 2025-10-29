@@ -14,7 +14,7 @@ test_config = {
     'data_file_name': 'Test1.steps.tracking.csv',
 
     'test_recipe': [
-#        {'name': 'axial', 'end_time': 10.0, 'type': 'AXIAL'},
+        {'name': 'axial', 'end_time': 40.0, 'type': 'AXIAL'},
     ],
 
     'geometry': {
@@ -28,7 +28,7 @@ test_config = {
     'plots': [
         {
             'type': 'static',
-            'phases': ['__full__'],
+            'phases': ['axial'],
             'x_col': 'time',
             'y_col': 'displacement',
             'title': '{y_col} vs. {x_col}',
@@ -36,7 +36,7 @@ test_config = {
         },
         {
             'type': 'static',
-            'phases': ['__full__'],
+            'phases': ['axial'],
             'x_col': 'time',
             'y_col': 'force',
             'title': '{y_col} vs. {x_col}',
@@ -44,15 +44,25 @@ test_config = {
         },
         {
             'type': 'static',
-            'phases': ['__full__'],
+            'phases': ['axial'],
             'x_col': 'displacement',
             'y_col': 'force',
             'title': '{y_col} vs. {x_col}',
             'output_filename': '{phase_name}_{y_col}_{x_col}'
         },
         {
+            'type': ['static', 'animated'],
+            'phases': ['axial'],
+            'x_col': 'axial_strain',
+            'y_col': 'axial_stress',
+            'title': '{y_col} vs. {x_col}',
+            'output_filename': '{phase_name}_{y_col}_{x_col}',
+            'fit_line': True,
+            'fit_bounds': None,
+        },
+        {
             'type': 'animated',
-            'phases': ['__full__'],
+            'phases': ['axial'],
             'x_col': 'displacement',
             'y_col': 'force',
             'title': '{y_col} vs. {x_col}',

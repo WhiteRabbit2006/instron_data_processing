@@ -13,7 +13,7 @@ DEFAULT_COLUMN_MAPPING = {
 
 # Default flags for inverting data signs. Primarily for the legacy data cleaning method.
 DEFAULT_INVERSION_FLAGS = {
-    'force': True,
+    'force': False,
     'torque': True
 }
 
