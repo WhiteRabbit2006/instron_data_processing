@@ -36,6 +36,22 @@ test_config = {
             'output_filename': '{phase_name}_{y_col}_{x_col}'
         },
         {
+            'type': 'static',
+            'phases': ['axial'],
+            'x_col': 'time',
+            'y_col': 'force',
+            'title': '{y_col} vs. {x_col}',
+            'output_filename': '{phase_name}_{y_col}_{x_col}'
+        },
+        {
+            'type': 'static',
+            'phases': ['axial'],
+            'x_col': 'displacement',
+            'y_col': 'force',
+            'title': '{y_col} vs. {x_col}',
+            'output_filename': '{phase_name}_{y_col}_{x_col}'
+        },
+        {
             'type': ['static', 'animated'],
             'phases': ['axial'],
             'x_col': 'axial_strain',
