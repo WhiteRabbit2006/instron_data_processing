@@ -1,4 +1,0 @@
-Specimen Type: Flat Specimen
-Thickness (1): 0.10000 mm
-Width (2): 20.00000 mm
-Cross Sectional Area: 2.00000 mm²
