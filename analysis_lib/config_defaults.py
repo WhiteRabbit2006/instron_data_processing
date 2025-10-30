@@ -12,7 +12,7 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'rotation':   {'raw_col': 'Rotation (deg)', 'raw_units': 'deg'},
             'torque':     {'raw_col': 'Torque (N·m)', 'raw_units': 'N·m'}
         },
-        'inversion_flags': { 'force': True, 'torque': True }
+        'inversion_flags': { 'force': False, 'torque': False }
     },
     'bluehill': {
         'description': 'Profile for using BlueHill testing software.',
@@ -22,7 +22,7 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'force':         {'raw_col': 'Force (kN)', 'raw_units': 'kN'},
             'axial_strain':  {'raw_col': 'AVE2 (%)', 'raw_units': 'percent'}
         },
-        'inversion_flags': { 'force': True, 'torque': True }
+        'inversion_flags': { 'force': False, 'torque': False}
     }
 }
 

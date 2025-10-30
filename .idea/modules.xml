@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Instron Data Processing.iml" filepath="$PROJECT_DIR$/.idea/Instron Data Processing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/data_processing_library.iml" filepath="$PROJECT_DIR$/.idea/data_processing_library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../tests/.idea/tests.iml" filepath="$PROJECT_DIR$/../tests/.idea/tests.iml" />
     </modules>
   </component>
 </project>
