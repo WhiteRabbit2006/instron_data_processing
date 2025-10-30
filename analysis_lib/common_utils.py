@@ -1,7 +1,7 @@
 # analysis_lib/common_utils.py
 import os
 import pandas as pd
-
+import logging
 
 def load_csv_data(file_path, **kwargs):
     """
@@ -10,7 +10,7 @@ def load_csv_data(file_path, **kwargs):
     """
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Data file not found at: {file_path}")
-    print(f"Loading data from: {os.path.basename(file_path)}")
+    logging.info(f"Loading data from: {os.path.basename(file_path)}")
     return pd.read_csv(file_path, **kwargs)
 
 
@@ -33,9 +33,9 @@ def split_data_by_time(df, split_points, time_col='Total Time (s)'):
     for end_time in split_points:
         # Create a boolean mask for the current time window
         mask = (df[time_col] > last_time) & (df[time_col] <= end_time)
-        segment_df = df[mask]
+        segment_df = df[mask].copy() # Use .copy() to avoid SettingWithCopyWarning
         segments.append(segment_df)
-        print(f"Created segment from t={last_time:.2f}s to t={end_time:.2f}s with {len(segment_df)} data points.")
+        logging.info(f"Created segment from t={last_time:.2f}s to t={end_time:.2f}s with {len(segment_df)} data points.")
         last_time = end_time  # Update the start time for the next segment
 
     return segments
