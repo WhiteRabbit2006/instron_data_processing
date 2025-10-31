@@ -75,6 +75,8 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 		sources = final_config.get('column_sources', {})
 		inversion_flags = final_config.get('inversion_flags', {})
 
+		tare_options = final_config.get('tare_options', {})
+
 		for key, source_info in sources.items():
 			registry_entry = config_defaults.DATA_COLUMN_REGISTRY[key]
 			standard_name = registry_entry['standard_name']
@@ -87,8 +89,14 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 				convert_func = registry_entry['standardize_from'][raw_units]
 				series = convert_func(series)
 			if inversion_flags.get(key, False): series *= -1
-			if key == 'position': series -= series.iloc[0]
-			clean_df[standard_name] = series
+			if tare_options.get(key, False):
+				if not series.empty:
+					series -= series.iloc[0]
+					logging.info(f"Applied taring to '{key}' channel (normalized to start at zero).")
+				else:
+					logging.warning(f"Attempted to tare '{key}', but the series was empty.")
+				if key == 'position': series -= series.iloc[0]
+				clean_df[standard_name] = series
 		logging.info("Data standardization complete.")
 
 		# === 4. DATA SEGMENTATION ===
