@@ -13,7 +13,15 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'rotation':   {'raw_col': 'Rotation (deg)', 'raw_units': 'deg'},
             'torque':     {'raw_col': 'Torque (N·m)', 'raw_units': 'N·m'}
         },
-        'inversion_flags': { 'force': False, 'torque': False }
+        'inversion_flags': { 'force': False, 'torque': False },
+        'default_plots_to_include': [
+            'time_position_static', 'time_position_animated',
+            'force_position_static', 'force_position_animated',
+            'time_rotation_static', 'time_rotation_animated',
+            'torque_rotation_static', 'torque_rotation_animated',
+            'stress_strain_static', 'stress_strain_animated',
+            'shear_stress_shear_strain_static', 'shear_stress_shear_strain_animated'
+        ]
     },
     'bluehill': {
         'description': 'Profile for using BlueHill testing software.',
@@ -23,7 +31,12 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'force':         {'raw_col': 'Force (kN)', 'raw_units': 'kN'},
             'axial_strain':  {'raw_col': 'AVE2 (%)', 'raw_units': 'percent'}
         },
-        'inversion_flags': { 'force': False, 'torque': False}
+        'inversion_flags': { 'force': False, 'torque': False},
+        'default_plots_to_include': [
+            'time_position_static', 'time_position_animated',
+            'force_position_static', 'force_position_animated',
+            'stress_strain_static', 'stress_strain_animated'
+        ]
     }
 }
 
@@ -84,4 +97,84 @@ DATA_COLUMN_REGISTRY: Dict[str, Dict[str, Any]] = {
         'conversions': { 'GPa': lambda x: x / 1000, 'kPa': lambda x: x * 1000 },
         'auto_scale_options': [ (1000, 'GPa'), (1, 'MPa'), (1e-3, 'kPa') ]
     }
+}
+
+DEFAULT_PLOTS: Dict[str, Dict[str, Any]] = {
+    # Axial Plots
+    'time_position_static': {
+        'x_col': 'time', 'y_col': 'position',
+        'title': '{phase_name} - Position vs. Time',
+        'output_filename': '{phase_name}_position_time_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'time_position_animated': {
+        'x_col': 'time', 'y_col': 'position',
+        'title': '{phase_name} - Position vs. Time (Animated)',
+        'output_filename': '{phase_name}_position_time_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
+    'force_position_static': {
+        'x_col': 'position', 'y_col': 'force',
+        'title': '{phase_name} - Force vs. Position',
+        'output_filename': '{phase_name}_force_position_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'force_position_animated': {
+        'x_col': 'position', 'y_col': 'force',
+        'title': '{phase_name} - Force vs. Position (Animated)',
+        'output_filename': '{phase_name}_force_position_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
+    'stress_strain_static': {
+        'x_col': 'axial_strain', 'y_col': 'axial_stress',
+        'title': '{phase_name} - Axial Stress vs. Axial Strain',
+        'output_filename': '{phase_name}_axial_stress_strain_static',
+        'phases': ['*'], 'type': 'static',
+        'fit_line': True, 'fit_bounds': [0.0005, 0.0025] # Example bounds for linear region
+    },
+    'stress_strain_animated': {
+        'x_col': 'axial_strain', 'y_col': 'axial_stress',
+        'title': '{phase_name} - Axial Stress vs. Axial Strain (Animated)',
+        'output_filename': '{phase_name}_axial_stress_strain_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
+
+    # Torsional Plots
+    'time_rotation_static': {
+        'x_col': 'time', 'y_col': 'rotation',
+        'title': '{phase_name} - Rotation vs. Time',
+        'output_filename': '{phase_name}_rotation_time_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'time_rotation_animated': {
+        'x_col': 'time', 'y_col': 'rotation',
+        'title': '{phase_name} - Rotation vs. Time (Animated)',
+        'output_filename': '{phase_name}_rotation_time_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
+    'torque_rotation_static': {
+        'x_col': 'rotation', 'y_col': 'torque',
+        'title': '{phase_name} - Torque vs. Rotation',
+        'output_filename': '{phase_name}_torque_rotation_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'torque_rotation_animated': {
+        'x_col': 'rotation', 'y_col': 'torque',
+        'title': '{phase_name} - Torque vs. Rotation (Animated)',
+        'output_filename': '{phase_name}_torque_rotation_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
+    'shear_stress_shear_strain_static': {
+        'x_col': 'shear_strain', 'y_col': 'shear_stress',
+        'title': '{phase_name} - Shear Stress vs. Shear Strain',
+        'output_filename': '{phase_name}_shear_stress_strain_static',
+        'phases': ['*'], 'type': 'static',
+        'fit_line': True, 'fit_bounds': [0.0005, 0.0025] # Example bounds for linear region
+    },
+    'shear_stress_shear_strain_animated': {
+        'x_col': 'shear_strain', 'y_col': 'shear_stress',
+        'title': '{phase_name} - Shear Stress vs. Shear Strain (Animated)',
+        'output_filename': '{phase_name}_shear_stress_strain_animated',
+        'phases': ['*'], 'type': 'animated'
+    },
 }
