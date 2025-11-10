@@ -64,24 +64,24 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 			if isinstance(value, dict) and key in base_profile:
 				final_config[key] = {**base_profile[key], **value}
 
-        # --- NEW LOGIC FOR DEFAULT PLOTS ---
-        # Start with user-defined plots
-        plot_configs = final_config.get('plots', [])
-        
-        # Add default plots specified in the profile or user config
-        default_plot_keys_to_include = final_config.get('default_plots_to_include', [])
-        for plot_key in default_plot_keys_to_include:
-            if plot_key in config_defaults.DEFAULT_PLOTS:
-                default_plot = copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_key])
-                # Append default plots. User-defined plots with the same output_filename
-                # will overwrite if processed later, or can be explicitly excluded by user.
-                plot_configs.append(default_plot)
-            else:
-                logging.warning(f"Default plot key '{plot_key}' not found in DEFAULT_PLOTS registry.")
-        
-        # Ensure plot_configs is a list, even if it was None initially
-        final_config['plots'] = plot_configs
-        # --- END NEW LOGIC ---
+		# --- NEW LOGIC FOR DEFAULT PLOTS ---
+		# Start with user-defined plots
+		plot_configs = final_config.get('plots', [])
+		
+		# Add default plots specified in the profile or user config
+		default_plot_keys_to_include = final_config.get('default_plots_to_include', [])
+		for plot_key in default_plot_keys_to_include:
+			if plot_key in config_defaults.DEFAULT_PLOTS:
+				default_plot = copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_key])
+				# Append default plots. User-defined plots with the same output_filename
+				# will overwrite if processed later, or can be explicitly excluded by user.
+				plot_configs.append(default_plot)
+			else:
+				logging.warning(f"Default plot key '{plot_key}' not found in DEFAULT_PLOTS registry.")
+		
+		# Ensure plot_configs is a list, even if it was None initially
+		final_config['plots'] = plot_configs
+		# --- END NEW LOGIC ---
 
 		# === 2. PATH AND DIRECTORY SETUP ===
 		output_dir = os.path.join(script_path, 'graphs')
