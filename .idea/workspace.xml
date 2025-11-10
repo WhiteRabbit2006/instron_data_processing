@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="415b8751-6c38-4f88-bcde-529b8f234ec9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.aider.context.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/add_default_plots_context.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_numpy_import.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_numpy_import_checklist.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_numpy_import_context.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_time_col_error.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_time_col_error_checklist.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.coding-aider-plans/fix_time_col_error_context.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_lib/config_defaults.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_lib/config_defaults.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis_lib/workflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis_lib/workflow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,20 +46,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python tests.pytest in tests.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.pytest in tests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;de.andrena.codingaider.settings.AiderSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="data_processing_library" />
@@ -76,7 +87,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-ce6832f46686-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.178" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
       </set>
     </attachedChunks>
   </component>

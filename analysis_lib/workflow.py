@@ -64,25 +64,6 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 			if isinstance(value, dict) and key in base_profile:
 				final_config[key] = {**base_profile[key], **value}
 
-		# --- NEW LOGIC FOR DEFAULT PLOTS ---
-		# Start with user-defined plots
-		plot_configs = final_config.get('plots', [])
-		
-		# Add default plots specified in the profile or user config
-		default_plot_keys_to_include = final_config.get('default_plots_to_include', [])
-		for plot_key in default_plot_keys_to_include:
-			if plot_key in config_defaults.DEFAULT_PLOTS:
-				default_plot = copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_key])
-				# Append default plots. User-defined plots with the same output_filename
-				# will overwrite if processed later, or can be explicitly excluded by user.
-				plot_configs.append(default_plot)
-			else:
-				logging.warning(f"Default plot key '{plot_key}' not found in DEFAULT_PLOTS registry.")
-		
-		# Ensure plot_configs is a list, even if it was None initially
-		final_config['plots'] = plot_configs
-		# --- END NEW LOGIC ---
-
 		# === 2. PATH AND DIRECTORY SETUP ===
 		output_dir = os.path.join(script_path, 'graphs')
 		input_file_path = os.path.join(script_path, 'data', final_config['data_file_name'])
@@ -149,15 +130,35 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 			processed_data_store[phase_name] = processed_df
 
 		# === 6. PLOT GENERATION ===
-		# plot_configs = final_config.get('plots', []) # This line is now handled above
-		logging.info(f"\n--- Generating {len(final_config['plots'])} requested plot definition(s) ---")
-		
+		plot_configs_raw = final_config.get('plots', [])
+		resolved_plot_configs = []
+
+		for plot_def in plot_configs_raw:
+			if isinstance(plot_def, str):
+				# If it's a string, it's a key for a default plot
+				if plot_def in config_defaults.DEFAULT_PLOTS:
+					resolved_plot_configs.append(copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_def]))
+				else:
+					logging.warning(f"Plot key '{plot_def}' not found in DEFAULT_PLOTS registry. Skipping.")
+			elif isinstance(plot_def, dict):
+				# If it's a dictionary, it's a custom plot configuration
+				resolved_plot_configs.append(plot_def)
+			else:
+				logging.warning(f"Invalid plot definition type: {type(plot_def)}. Expected string or dict. Skipping.")
+
+		logging.info(f"\n--- Generating {len(resolved_plot_configs)} requested plot definition(s) ---")
+
 		# Get all phase names for '*' handling
 		all_phase_names = [phase['name'] for phase in recipe]
 
-		for plot_config in final_config['plots']: # Use the updated plot_configs from final_config
+		for plot_config in resolved_plot_configs:
+			# Ensure 'output_filename' is present for all plots, including custom ones
+			if 'output_filename' not in plot_config:
+				logging.warning(f"Plot configuration missing 'output_filename'. Skipping plot: {plot_config.get('title', 'Untitled Plot')}")
+				continue
+
 			target_phases = plot_config.get('phases', [])
-			
+
 			# Handle '*' for all phases
 			if '*' in target_phases:
 				phases_to_iterate = all_phase_names

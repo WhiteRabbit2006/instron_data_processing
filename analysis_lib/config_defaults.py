@@ -117,7 +117,7 @@ DEFAULT_PLOTS: Dict[str, Dict[str, Any]] = {
         'title': '{phase_name} - Axial Stress vs. Axial Strain',
         'output_filename': '{phase_name}_axial_stress_strain_static',
         'phases': ['*'], 'type': 'static',
-        'fit_line': True, 'fit_bounds': [0.0005, 0.0025] # Example bounds for linear region
+        'fit_line': True
     },
     'stress_strain_animated': {
         'x_col': 'axial_strain', 'y_col': 'axial_stress',
@@ -156,7 +156,7 @@ DEFAULT_PLOTS: Dict[str, Dict[str, Any]] = {
         'title': '{phase_name} - Shear Stress vs. Shear Strain',
         'output_filename': '{phase_name}_shear_stress_strain_static',
         'phases': ['*'], 'type': 'static',
-        'fit_line': True, 'fit_bounds': [0.0005, 0.0025] # Example bounds for linear region
+        'fit_line': True
     },
     'shear_stress_shear_strain_animated': {
         'x_col': 'shear_strain', 'y_col': 'shear_stress',
