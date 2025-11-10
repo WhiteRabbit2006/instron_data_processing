@@ -13,7 +13,6 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'rotation':   {'raw_col': 'Rotation (deg)', 'raw_units': 'deg'},
             'torque':     {'raw_col': 'Torque (N·m)', 'raw_units': 'N·m'}
         },
-        'inversion_flags': { 'force': False, 'torque': False },
         'inversion_flags': { 'force': False, 'torque': False }
     },
     'bluehill': {
