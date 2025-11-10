@@ -14,14 +14,7 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'torque':     {'raw_col': 'Torque (N·m)', 'raw_units': 'N·m'}
         },
         'inversion_flags': { 'force': False, 'torque': False },
-        'default_plots_to_include': [
-            'time_position_static', 'time_position_animated',
-            'force_position_static', 'force_position_animated',
-            'time_rotation_static', 'time_rotation_animated',
-            'torque_rotation_static', 'torque_rotation_animated',
-            'stress_strain_static', 'stress_strain_animated',
-            'shear_stress_shear_strain_static', 'shear_stress_shear_strain_animated'
-        ]
+        'inversion_flags': { 'force': False, 'torque': False }
     },
     'bluehill': {
         'description': 'Profile for using BlueHill testing software.',
@@ -31,12 +24,7 @@ SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
             'force':         {'raw_col': 'Force (kN)', 'raw_units': 'kN'},
             'axial_strain':  {'raw_col': 'AVE2 (%)', 'raw_units': 'percent'}
         },
-        'inversion_flags': { 'force': False, 'torque': False},
-        'default_plots_to_include': [
-            'time_position_static', 'time_position_animated',
-            'force_position_static', 'force_position_animated',
-            'stress_strain_static', 'stress_strain_animated'
-        ]
+        'inversion_flags': { 'force': False, 'torque': False}
     }
 }
 
