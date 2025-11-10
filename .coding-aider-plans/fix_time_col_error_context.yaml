@@ -1,0 +1,8 @@
+---
+files:
+- path: analysis_lib/workflow.py
+  readOnly: false
+- path: analysis_lib/common_utils.py
+  readOnly: true
+- path: analysis_lib/config_defaults.py
+  readOnly: true
