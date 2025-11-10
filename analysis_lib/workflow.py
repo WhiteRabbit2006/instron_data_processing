@@ -95,14 +95,22 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
 					logging.info(f"Applied taring to '{key}' channel (normalized to start at zero).")
 				else:
 					logging.warning(f"Attempted to tare '{key}', but the series was empty.")
-				if key == 'position': series -= series.iloc[0]
-				clean_df[standard_name] = series
+				# Removed the problematic line: if key == 'position': series -= series.iloc[0]
+			clean_df[standard_name] = series
 		logging.info("Data standardization complete.")
 
 		# === 4. DATA SEGMENTATION ===
 		recipe: List[Dict[str, Any]] = final_config['test_recipe']
 		split_points = [phase['end_time'] for phase in recipe]
-		data_segments = common_utils.split_data_by_time(clean_df, split_points)
+		
+		# Get the standard name for the time column from the registry
+		time_standard_name = config_defaults.DATA_COLUMN_REGISTRY['time']['standard_name']
+		
+		# Defensive check: Ensure the time column exists in clean_df
+		if time_standard_name not in clean_df.columns:
+			raise KeyError(f"Required time column '{time_standard_name}' not found in processed data. Available columns: {clean_df.columns.tolist()}")
+
+		data_segments = common_utils.split_data_by_time(clean_df, split_points, time_col=time_standard_name)
 
 		# === 5. PHASE-BY-PHASE ANALYSIS (USING REGISTRY) ===
 		processed_data_store: Dict[str, pd.DataFrame] = {}
