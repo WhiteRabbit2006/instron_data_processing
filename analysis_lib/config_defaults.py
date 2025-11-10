@@ -1,6 +1,7 @@
 # analysis_lib/config_defaults.py
 
 from typing import Dict, Any, List, Tuple, Callable
+import numpy as np
 
 SOFTWARE_PROFILES: Dict[str, Dict[str, Any]] = {
     'wavematrix': {
