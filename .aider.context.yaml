@@ -1,0 +1,28 @@
+---
+files:
+- path: "analysis_lib/_init_.py"
+  readOnly: false
+- path: "analysis_lib/axial_analysis.py"
+  readOnly: false
+- path: "analysis_lib/common_utils.py"
+  readOnly: false
+- path: "analysis_lib/config_defaults.py"
+  readOnly: false
+- path: "analysis_lib/plotting_tools.py"
+  readOnly: false
+- path: "analysis_lib/torsional_analysis.py"
+  readOnly: false
+- path: "analysis_lib/workflow.py"
+  readOnly: false
+- path: "tests/sample_data/sample_bluehill.csv"
+  readOnly: false
+- path: "tests/test_analysis_modules.py"
+  readOnly: false
+- path: "../tests/latex_glove/oct_24/main.py"
+  readOnly: false
+- path: "../tests/silicone_10a/oct_22/main.py"
+  readOnly: false
+- path: "../tests/silicone_30a/oct_29_t2/main.py"
+  readOnly: false
+- path: "../tests/silicone_30a/oct_29/main.py"
+  readOnly: false
