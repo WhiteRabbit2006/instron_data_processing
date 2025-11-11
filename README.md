@@ -33,13 +33,13 @@ matmech/
 
 ## Installation
 
-To install the `matmech` package, it is recommended to install it in editable mode within your development environment:
+To install the `matmech` package, navigate to the root of the `matmech` repository and install it in editable mode within your development environment:
 
 ```bash
 pip install -e .
 ```
 
-This command installs the package in "editable" mode, meaning that changes to the source code in your project directory will immediately affect the installed package without needing to reinstall.
+This command installs the package in "editable" mode, meaning that changes to the source code in your `matmech` repository will immediately affect the installed package without needing to reinstall.
 
 ### Requirements
 
@@ -65,7 +65,7 @@ On Windows, you can download it from the [FFmpeg website](https://ffmpeg.org/dow
 ## Example Directory Layout
 
 ```
-project_root/
+matmech/
 │
 ├── data/
 │   └── my_test_run.csv
