@@ -69,6 +69,8 @@ FULL EXAMPLE: main.py
 The following example shows ALL available configuration options.
 
 ------------------------------------------------------------
+# This script now relies on the 'mat-analyzer' package
+# being installed in editable mode (pip install -e .).
 import os
 from analysis_lib.workflow import run_analysis_workflow
 
