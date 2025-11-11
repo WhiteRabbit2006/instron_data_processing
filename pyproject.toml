@@ -1,7 +1,7 @@
 # pyproject.toml
 
 [project]
-name = "mat-analyzer"
+name = "matmech"
 version = "1.0.0"
 description = "A library for analyzing data from universal test machines."
 authors = [{ name = "Your Name", email = "info@example.com" }] # Replace with actual author info
@@ -15,4 +15,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["mat_analyzer"]
+packages = ["matmech"]

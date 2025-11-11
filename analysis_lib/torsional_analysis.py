@@ -10,7 +10,7 @@ from typing import Any, Dict
 import numpy as np
 import pandas as pd
 
-from analysis_lib import config_defaults
+from matmech import config_defaults
 
 
 def calculate_torsional_properties_rect(

@@ -1,8 +1,8 @@
-# mat-analyzer
+# matmech
 
 ## Overview
 
-The `mat-analyzer` Python library processes, analyzes, and visualizes mechanical testing data (e.g., from Instron devices using WaveMatrix or BlueHill software).
+The `matmech` Python library processes, analyzes, and visualizes mechanical testing data (e.g., from Instron devices using WaveMatrix or BlueHill software).
 
 It automates the workflow from:
 *   Raw CSV import
@@ -20,7 +20,7 @@ It automates the workflow from:
 ## Library Structure
 
 ```
-mat_analyzer/
+matmech/
 │
 ├── __init__.py             # Package initialization
 ├── common_utils.py         # Loading and splitting CSV data by time
@@ -82,7 +82,7 @@ The following example shows ALL available configuration options.
 
 ```python
 import os
-from mat_analyzer.workflow import run_analysis_workflow
+from matmech.workflow import run_analysis_workflow
 
 if __name__ == "__main__":
     # Path configuration
@@ -222,7 +222,7 @@ To register a new analysis type:
 
 ## Notes
 
-*   The data column naming conventions differ between software types. The file `mat_analyzer/config_defaults.py` defines these profiles for both WaveMatrix and BlueHill.
+*   The data column naming conventions differ between software types. The file `matmech/config_defaults.py` defines these profiles for both WaveMatrix and BlueHill.
 *   Axis units and autoscaling are handled automatically but can be overridden per plot.
 
 ## License

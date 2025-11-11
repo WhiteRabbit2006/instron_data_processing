@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from analysis_lib import config_defaults
+from matmech import config_defaults
 
 
 def _calculate_axis_limits(

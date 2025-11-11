@@ -1,5 +1,5 @@
 """
-The `mat-analyzer` package provides tools for processing and visualizing
+The `matmech` package provides tools for processing and visualizing
 mechanical test data.
 
 It includes modules for:

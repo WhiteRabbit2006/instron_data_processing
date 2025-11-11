@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 import pandas as pd
 
-from analysis_lib import config_defaults
+from matmech import config_defaults
 
 
 def calculate_axial_properties(df: pd.DataFrame, geometry: Dict[str, Any]) -> pd.DataFrame:

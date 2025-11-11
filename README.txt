@@ -1,5 +1,5 @@
 ===============================================
- MATERIAL TEST DATA ANALYZER (README.txt)
+ MATMECH - MATERIAL MECHANICS ANALYZER (README.txt)
 ===============================================
 
 Overview:
@@ -22,7 +22,7 @@ Supported functions:
 
 Library Structure:
 -------------------
-analysis_lib/
+matmech/
 │
 ├── common_utils.py         # Loading and splitting CSV data by time
 ├── axial_analysis.py       # Calculates axial stress and strain
@@ -69,10 +69,10 @@ FULL EXAMPLE: main.py
 The following example shows ALL available configuration options.
 
 ------------------------------------------------------------
-# This script now relies on the 'mat-analyzer' package
+# This script now relies on the 'matmech' package
 # being installed in editable mode (pip install -e .).
 import os
-from analysis_lib.workflow import run_analysis_workflow
+from matmech.workflow import run_analysis_workflow
 
 if __name__ == "__main__":
     # Path configuration
