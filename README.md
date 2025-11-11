@@ -229,4 +229,4 @@ To register a new analysis type:
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-Copyright (c) 2025 Your Name
+Copyright (c) 2025 Mitchell Blaha
