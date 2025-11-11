@@ -274,7 +274,7 @@ def test_calculate_linear_fit():
     assert fit_results_empty == {}
 
 
-def test_run_analysis_workflow_integration(tmp_path):
+def test_run_analysis_workflow_integration(tmp_path, caplog):
     """
     Integration test for the full analysis workflow, covering data loading,
     processing, and plot generation for both axial and torsional data.
