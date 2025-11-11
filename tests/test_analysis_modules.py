@@ -402,7 +402,7 @@ def test_run_analysis_workflow_integration(tmp_path, caplog):
 
         # Expected warning parts for skipped stress-strain plots
         expected_reason_part = (
-            f"Reason: Required base column '{re.escape(AXIAL_STRAIN_COL)}' for 'axial_strain' does not exist"
+            f"Reason: Required base column '{AXIAL_STRAIN_COL}' for 'axial_strain' does not exist"
         )
         
         # Check for the warning related to the 'Loading' phase stress-strain plot
