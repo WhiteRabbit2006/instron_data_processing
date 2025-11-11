@@ -1,5 +1,5 @@
 """
-The analysis_lib package provides tools for processing and visualizing
+The `mat-analyzer` package provides tools for processing and visualizing
 mechanical test data.
 
 It includes modules for:
