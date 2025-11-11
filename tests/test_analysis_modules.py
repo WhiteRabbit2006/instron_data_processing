@@ -7,7 +7,7 @@ known inputs and expected outputs.
 """
 
 import logging
-import logging
+import re  # Import the 're' module for regex escaping
 import numpy as np
 import pandas as pd
 import pytest
@@ -380,7 +380,7 @@ def test_run_analysis_workflow_integration(tmp_path):
         "time": {"raw_col": "NonExistentTime", "raw_units": "s"},
         "force": {"raw_col": "Force (kN)", "raw_units": "kN"},
     }
-    with pytest.raises(KeyError, match=f"Required time column '{TIME_COL}' not found"):
+    with pytest.raises(KeyError, match=f"Required time column '{re.escape(TIME_COL)}' not found"):
         workflow.run_analysis_workflow(str(script_path), user_config_missing_time_col)
 
     # Test error handling for missing geometry for analysis leading to missing plot column
