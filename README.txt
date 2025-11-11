@@ -1,10 +1,10 @@
 ===============================================
- INSTRON DATA ANALYSIS LIBRARY (README.txt)
+ MATERIAL TEST DATA ANALYZER (README.txt)
 ===============================================
 
 Overview:
 ----------
-This Python library processes, analyzes, and visualizes cyclical axial and torsional testing
+This Python library processes, analyzes, and visualizes mechanical testing
 data (e.g., from Instron devices using WaveMatrix or BlueHill software).
 
 It automates the workflow from:
