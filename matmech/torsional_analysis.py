@@ -68,14 +68,14 @@ def calculate_torsional_properties_rect(
     alpha = (1 / 3) * (1 - 0.630 * (1 / aspect_ratio))
 
     # Convert rotation to radians
-    df_processed["Rotation (rad)"] = np.deg2rad(df_processed[config_defaults.ROTATION_COL])
+    df_processed["Rotation (rad)"] = np.deg2rad(df_processed[ROTATION_COL])
 
     # Calculate Shear Strain (gamma)
     # For a rectangular bar, max shear strain occurs at the midpoint of the longer side.
     # The formula used here is a simplified one, often for circular shafts or as an approximation.
     # For rectangular sections, the shear strain distribution is complex.
     # This formula assumes max shear strain at the surface of the shorter side.
-    df_processed[config_defaults.SHEAR_STRAIN_COL] = (
+    df_processed[SHEAR_STRAIN_COL] = (
         short_side_m * df_processed["Rotation (rad)"]
     ) / gauge_length_m
 
@@ -90,11 +90,11 @@ def calculate_torsional_properties_rect(
         )
         return df_processed
 
-    df_processed[config_defaults.SHEAR_STRESS_PA_COL] = df_processed[
-        config_defaults.TORQUE_COL
+    df_processed[SHEAR_STRESS_PA_COL] = df_processed[
+        TORQUE_COL
     ] / denominator
-    df_processed[config_defaults.SHEAR_STRESS_MPA_COL] = (
-        df_processed[config_defaults.SHEAR_STRESS_PA_COL] / 1e6
+    df_processed[SHEAR_STRESS_MPA_COL] = (
+        df_processed[SHEAR_STRESS_PA_COL] / 1e6
     )
 
     logging.info("Torsional properties for rectangular cross-section calculated.")

@@ -38,11 +38,11 @@ def calculate_axial_properties(df: pd.DataFrame, geometry: Dict[str, Any]) -> pd
         thickness_m = geometry["axial_thickness_mm"] / 1000.0
         cross_sectional_area_m2 = width_m * thickness_m
 
-        df_processed[config_defaults.AXIAL_STRESS_PA_COL] = df_processed[
-            config_defaults.FORCE_COL
+        df_processed[AXIAL_STRESS_PA_COL] = df_processed[
+            FORCE_COL
         ] / cross_sectional_area_m2
-        df_processed[config_defaults.AXIAL_STRESS_MPA_COL] = (
-            df_processed[config_defaults.AXIAL_STRESS_PA_COL] / 1e6
+        df_processed[AXIAL_STRESS_MPA_COL] = (
+            df_processed[AXIAL_STRESS_PA_COL] / 1e6
         )
         logging.info("Axial stress calculated.")
     except KeyError:
@@ -54,11 +54,11 @@ def calculate_axial_properties(df: pd.DataFrame, geometry: Dict[str, Any]) -> pd
         logging.error("Cross-sectional area is zero, cannot calculate axial stress.")
 
     # Calculate Axial Strain if not already present
-    if config_defaults.AXIAL_STRAIN_COL not in df_processed.columns:
+    if AXIAL_STRAIN_COL not in df_processed.columns:
         try:
             gauge_length_m = geometry["gauge_length_mm"] / 1000.0
-            displacement_m = df_processed[config_defaults.POSITION_COL] / 1000.0
-            df_processed[config_defaults.AXIAL_STRAIN_COL] = (
+            displacement_m = df_processed[POSITION_COL] / 1000.0
+            df_processed[AXIAL_STRAIN_COL] = (
                 displacement_m / gauge_length_m
             )
             logging.info("Axial strain calculated from displacement.")
