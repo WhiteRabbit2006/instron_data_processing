@@ -394,8 +394,40 @@ def test_run_analysis_workflow_integration(tmp_path):
         "force": {"raw_col": "Force (kN)", "raw_units": "kN"},
         # axial_strain is intentionally omitted here to force calculation via geometry
     }
-    with pytest.raises(KeyError, match=f"Required base column '{AXIAL_STRAIN_COL}' for 'axial_strain' does not exist"):
+
+    # Clear caplog before this specific test to avoid interference from previous logs
+    caplog.clear()
+    with caplog.at_level(logging.WARNING):
         workflow.run_analysis_workflow(str(script_path), user_config_missing_geometry)
+
+        # Expected warning parts for skipped stress-strain plots
+        expected_reason_part = (
+            f"Reason: Required base column '{re.escape(AXIAL_STRAIN_COL)}' for 'axial_strain' does not exist"
+        )
+        
+        # Check for the warning related to the 'Loading' phase stress-strain plot
+        assert any(
+            "Skipping plot 'Loading - Axial Stress vs. Axial Strain'" in record.message
+            and expected_reason_part in record.message
+            for record in caplog.records
+        )
+        # Check for the warning related to the 'Unloading' phase stress-strain plot
+        assert any(
+            "Skipping plot 'Unloading - Axial Stress vs. Axial Strain'" in record.message
+            and expected_reason_part in record.message
+            for record in caplog.records
+        )
+
+    # Check for expected plot files (some should be created, some not)
+    # These plots should be skipped due to missing axial_strain/stress
+    assert not (graphs_dir / "Loading_axial_stress_strain_static.png").exists()
+    assert not (graphs_dir / "Unloading_axial_stress_strain_static.png").exists()
+    # This plot should still be created as it only depends on 'time' and 'force'
+    assert (graphs_dir / "Loading_force_time_custom.png").exists()
+
+    # Clean up graphs_dir again to ensure a clean state for any subsequent tests
+    shutil.rmtree(graphs_dir)
+    graphs_dir.mkdir()
 
 
 def test_calculate_torsional_properties_rect():
