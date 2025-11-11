@@ -401,20 +401,22 @@ def test_run_analysis_workflow_integration(tmp_path, caplog):
         workflow.run_analysis_workflow(str(script_path), user_config_missing_geometry)
 
         # Expected warning parts for skipped stress-strain plots
-        expected_reason_part = (
-            f"Reason: Required base column '{AXIAL_STRAIN_COL}' for 'axial_strain' does not exist"
+        # Expected warning parts for skipped stress-strain plots
+        # The KeyError message includes dynamic content (available columns), so we'll match a fixed prefix.
+        expected_reason_prefix = (
+            f"Reason: Required base column '{re.escape(AXIAL_STRAIN_COL)}' for 'axial_strain' does not exist"
         )
         
         # Check for the warning related to the 'Loading' phase stress-strain plot
         assert any(
             "Skipping plot 'Loading - Axial Stress vs. Axial Strain'" in record.message
-            and expected_reason_part in record.message
+            and re.search(re.escape(expected_reason_prefix), record.message)
             for record in caplog.records
         )
         # Check for the warning related to the 'Unloading' phase stress-strain plot
         assert any(
             "Skipping plot 'Unloading - Axial Stress vs. Axial Strain'" in record.message
-            and expected_reason_part in record.message
+            and re.search(re.escape(expected_reason_prefix), record.message)
             for record in caplog.records
         )
 
