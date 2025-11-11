@@ -118,10 +118,9 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     logging.info("Starting data analysis workflow...")
 
-    try:
-        # === 1. CONFIGURATION SETUP ===
-        software_type = user_config.get("software_type", config_defaults.DEFAULT_SOFTWARE_TYPE)
-        logging.info(f"Using software profile: '{software_type}'")
+    # === 1. CONFIGURATION SETUP ===
+    software_type = user_config.get("software_type", config_defaults.DEFAULT_SOFTWARE_TYPE)
+    logging.info(f"Using software profile: '{software_type}'")
 
         if software_type not in config_defaults.SOFTWARE_PROFILES:
             raise ValueError(f"Software type '{software_type}' not defined in SOFTWARE_PROFILES.")
@@ -348,5 +347,3 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
                         f"for phase '{phase_name}'. Reason: {e}"
                     )
         logging.info(f"\nMulti-phase analysis complete. Graphs saved in '{output_dir}'.")
-    except Exception as e:
-        logging.error(f"An unexpected error occurred in the workflow: {e}", exc_info=True)
