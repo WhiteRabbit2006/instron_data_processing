@@ -8,6 +8,15 @@ authors = [{ name = "Your Name", email = "info@example.com" }] # Replace with ac
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+urls = { "Repository" = "https://github.com/your-username/matmech" } # IMPORTANT: Replace with your actual GitHub repository URL
 dependencies = [
     "pandas",
     "numpy",
@@ -15,8 +24,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-animation = [] # ffmpeg is a system dependency, not a Python package
+animation = ["imageio", "imageio-ffmpeg"] # ffmpeg is a system dependency, not a Python package
 dev = ["pytest"]
 
 [tool.setuptools]
 packages = ["matmech"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
