@@ -129,11 +129,15 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
     final_config = {**base_profile, **user_config}
 
     # Deep merge dictionaries for nested configurations (e.g., 'geometry', 'plots')
+    # User-provided empty dictionaries for nested configs should explicitly override defaults.
     for key, value in user_config.items():
-        if isinstance(value, dict) and key in base_profile and isinstance(base_profile[key], dict):
-            final_config[key] = {**base_profile[key], **value}
-        elif isinstance(value, list) and key in base_profile and isinstance(base_profile[key], list):
-            # For lists, extend or replace based on desired behavior. Here, we replace.
+        if isinstance(value, dict):
+            if key in base_profile and isinstance(base_profile[key], dict) and value: # Only merge if user_config dict is not empty
+                final_config[key] = {**base_profile[key], **value}
+            else: # If user_config dict is empty, or key not in base_profile, or base_profile[key] is not a dict, replace entirely
+                final_config[key] = value
+        elif isinstance(value, list):
+            # For lists, user_config's list completely replaces base_profile's list.
             final_config[key] = value
         # For other types, the shallow merge {**base_profile, **user_config} is sufficient.
 
