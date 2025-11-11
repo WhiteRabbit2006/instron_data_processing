@@ -18,6 +18,8 @@ permissions:
 jobs:
   release-build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -26,9 +28,29 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Extract version from release tag
+        id: extract_version
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          # Remove 'v' prefix if present, e.g., v1.0.1 -> 1.0.1
+          VERSION="${TAG_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Extracted version: $VERSION"
+
+      - name: Update package version in pyproject.toml
+        run: |
+          sed -i "s/^version = \".*\"$/version = \"${{ steps.extract_version.outputs.version }}\"/" pyproject.toml
+          echo "Updated pyproject.toml:"
+          cat pyproject.toml
+
+      - name: Update package version in matmech/__init__.py
+        run: |
+          sed -i "s/^__version__ = \".*\"$/__version__ = \"${{ steps.extract_version.outputs.version }}\"/" matmech/__init__.py
+          echo "Updated matmech/__init__.py:"
+          cat matmech/__init__.py
+
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
           python -m pip install build
           python -m build
 
@@ -56,7 +78,7 @@ jobs:
       #
       # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
       # ALTERNATIVE: exactly, uncomment the following line instead:
-      url: https://pypi.org/project/matmech/${{ github.event.release.name }}
+      url: https://pypi.org/project/matmech/${{ needs.release-build.outputs.version }}
 
     steps:
       - name: Retrieve release distributions
