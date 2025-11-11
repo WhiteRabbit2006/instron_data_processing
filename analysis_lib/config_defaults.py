@@ -112,6 +112,24 @@ DEFAULT_PLOTS: Dict[str, Dict[str, Any]] = {
         'output_filename': '{phase_name}_force_position_animated',
         'phases': ['*'], 'type': 'animated'
     },
+    'time_force_static': {
+        'x_col': 'time', 'y_col': 'force',
+        'title': '{phase_name} - Force vs. Time',
+        'output_filename': '{phase_name}_force_time_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'time_stress_static': {
+        'x_col': 'time', 'y_col': 'axial_stress',
+        'title': '{phase_name} - Axial Stress vs. Time',
+        'output_filename': '{phase_name}_axial_stress_time_static',
+        'phases': ['*'], 'type': 'static'
+    },
+    'time_strain_static': {
+        'x_col': 'time', 'y_col': 'axial_strain',
+        'title': '{phase_name} - Axial Strain vs. Time',
+        'output_filename': '{phase_name}_axial_strain_time_static',
+        'phases': ['*'], 'type': 'static'
+    },
     'stress_strain_static': {
         'x_col': 'axial_strain', 'y_col': 'axial_stress',
         'title': '{phase_name} - Axial Stress vs. Axial Strain',
