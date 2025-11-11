@@ -20,7 +20,7 @@ parts/
 sdist/
 var/
 wheels/
-*.egg-info/  # <--- Specifically ignores your folder
+*.egg-info/
 pip-wheel-metadata/
 share/python-wheels/
 *.manifest
