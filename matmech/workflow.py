@@ -122,228 +122,228 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
     software_type = user_config.get("software_type", config_defaults.DEFAULT_SOFTWARE_TYPE)
     logging.info(f"Using software profile: '{software_type}'")
 
-        if software_type not in config_defaults.SOFTWARE_PROFILES:
-            raise ValueError(f"Software type '{software_type}' not defined in SOFTWARE_PROFILES.")
+    if software_type not in config_defaults.SOFTWARE_PROFILES:
+        raise ValueError(f"Software type '{software_type}' not defined in SOFTWARE_PROFILES.")
 
-        base_profile = copy.deepcopy(config_defaults.SOFTWARE_PROFILES[software_type])
-        final_config = {**base_profile, **user_config}
+    base_profile = copy.deepcopy(config_defaults.SOFTWARE_PROFILES[software_type])
+    final_config = {**base_profile, **user_config}
 
-        # Deep merge dictionaries for nested configurations (e.g., 'geometry', 'plots')
-        for key, value in user_config.items():
-            if isinstance(value, dict) and key in base_profile and isinstance(base_profile[key], dict):
-                final_config[key] = {**base_profile[key], **value}
-            elif isinstance(value, list) and key in base_profile and isinstance(base_profile[key], list):
-                # For lists, extend or replace based on desired behavior. Here, we replace.
-                final_config[key] = value
-            # For other types, the shallow merge {**base_profile, **user_config} is sufficient.
+    # Deep merge dictionaries for nested configurations (e.g., 'geometry', 'plots')
+    for key, value in user_config.items():
+        if isinstance(value, dict) and key in base_profile and isinstance(base_profile[key], dict):
+            final_config[key] = {**base_profile[key], **value}
+        elif isinstance(value, list) and key in base_profile and isinstance(base_profile[key], list):
+            # For lists, extend or replace based on desired behavior. Here, we replace.
+            final_config[key] = value
+        # For other types, the shallow merge {**base_profile, **user_config} is sufficient.
 
-        # === 2. PATH AND DIRECTORY SETUP ===
-        output_dir = os.path.join(script_path, "graphs")
-        input_file_path = os.path.join(script_path, "data", final_config["data_file_name"])
-        os.makedirs(output_dir, exist_ok=True)
-        logging.info(f"Output directory set to: '{output_dir}'")
+    # === 2. PATH AND DIRECTORY SETUP ===
+    output_dir = os.path.join(script_path, "graphs")
+    input_file_path = os.path.join(script_path, "data", final_config["data_file_name"])
+    os.makedirs(output_dir, exist_ok=True)
+    logging.info(f"Output directory set to: '{output_dir}'")
 
-        # === 3. DATA LOADING AND STANDARDIZATION ===
-        full_raw_df = common_utils.load_csv_data(input_file_path)
-        clean_df = pd.DataFrame()
-        sources = final_config.get("column_sources", {})
-        inversion_flags = final_config.get("inversion_flags", {})
-        tare_options = final_config.get("tare_options", {})
+    # === 3. DATA LOADING AND STANDARDIZATION ===
+    full_raw_df = common_utils.load_csv_data(input_file_path)
+    clean_df = pd.DataFrame()
+    sources = final_config.get("column_sources", {})
+    inversion_flags = final_config.get("inversion_flags", {})
+    tare_options = final_config.get("tare_options", {})
 
-        for key, source_info in sources.items():
-            registry_entry = config_defaults.DATA_COLUMN_REGISTRY[key]
-            standard_name = registry_entry["standard_name"]
-            raw_col, raw_units = source_info["raw_col"], source_info["raw_units"]
+    for key, source_info in sources.items():
+        registry_entry = config_defaults.DATA_COLUMN_REGISTRY[key]
+        standard_name = registry_entry["standard_name"]
+        raw_col, raw_units = source_info["raw_col"], source_info["raw_units"]
 
-            if raw_col not in full_raw_df.columns:
-                logging.warning(
-                    f"Source column '{raw_col}' for '{key}' not in data file. Skipping '{key}'."
-                )
-                continue
-
-            series = full_raw_df[raw_col].copy()
-
-            # Standardize units
-            if raw_units != registry_entry["default_units"]:
-                if raw_units not in registry_entry["standardize_from"]:
-                    raise ValueError(
-                        f"Standardization from '{raw_units}' to "
-                        f"'{registry_entry['default_units']}' not defined for '{key}'."
-                    )
-                convert_func = registry_entry["standardize_from"][raw_units]
-                series = convert_func(series)
-                logging.debug(f"Standardized '{key}' from '{raw_units}' to '{registry_entry['default_units']}'.")
-
-            # Apply inversion if flagged
-            if inversion_flags.get(key, False):
-                series *= -1
-                logging.debug(f"Applied inversion to '{key}' channel.")
-
-            # Apply taring if flagged
-            if tare_options.get(key, False):
-                if not series.empty:
-                    series -= series.iloc[0]
-                    logging.debug(f"Applied taring to '{key}' channel (normalized to start at zero).")
-                else:
-                    logging.warning(f"Attempted to tare '{key}', but the series was empty.")
-
-            clean_df[standard_name] = series
-
-        logging.info("Data standardization complete.")
-
-        # === 4. DATA SEGMENTATION ===
-        recipe: List[Dict[str, Any]] = final_config["test_recipe"]
-        split_points = [phase["end_time"] for phase in recipe]
-
-        # Get the standard name for the time column from the constants
-        time_standard_name = TIME_COL
-
-        # Defensive check: Ensure the time column exists in clean_df
-        if time_standard_name not in clean_df.columns:
-            raise KeyError(
-                f"Required time column '{time_standard_name}' not found in processed data. "
-                f"Available columns: {clean_df.columns.tolist()}"
+        if raw_col not in full_raw_df.columns:
+            logging.warning(
+                f"Source column '{raw_col}' for '{key}' not in data file. Skipping '{key}'."
             )
+            continue
 
-        data_segments = common_utils.split_data_by_time(
-            clean_df, split_points, time_col=time_standard_name
+        series = full_raw_df[raw_col].copy()
+
+        # Standardize units
+        if raw_units != registry_entry["default_units"]:
+            if raw_units not in registry_entry["standardize_from"]:
+                raise ValueError(
+                    f"Standardization from '{raw_units}' to "
+                    f"'{registry_entry['default_units']}' not defined for '{key}'."
+                )
+            convert_func = registry_entry["standardize_from"][raw_units]
+            series = convert_func(series)
+            logging.debug(f"Standardized '{key}' from '{raw_units}' to '{registry_entry['default_units']}'.")
+
+        # Apply inversion if flagged
+        if inversion_flags.get(key, False):
+            series *= -1
+            logging.debug(f"Applied inversion to '{key}' channel.")
+
+        # Apply taring if flagged
+        if tare_options.get(key, False):
+            if not series.empty:
+                series -= series.iloc[0]
+                logging.debug(f"Applied taring to '{key}' channel (normalized to start at zero).")
+            else:
+                logging.warning(f"Attempted to tare '{key}', but the series was empty.")
+
+        clean_df[standard_name] = series
+
+    logging.info("Data standardization complete.")
+
+    # === 4. DATA SEGMENTATION ===
+    recipe: List[Dict[str, Any]] = final_config["test_recipe"]
+    split_points = [phase["end_time"] for phase in recipe]
+
+    # Get the standard name for the time column from the constants
+    time_standard_name = TIME_COL
+
+    # Defensive check: Ensure the time column exists in clean_df
+    if time_standard_name not in clean_df.columns:
+        raise KeyError(
+            f"Required time column '{time_standard_name}' not found in processed data. "
+            f"Available columns: {clean_df.columns.tolist()}"
         )
 
-        # === 5. PHASE-BY-PHASE ANALYSIS (USING REGISTRY) ===
-        processed_data_store: Dict[str, pd.DataFrame] = {}
-        for i, (phase, segment_df) in enumerate(zip(recipe, data_segments)):
-            phase_name, analysis_type = phase["name"], phase["type"]
-            logging.info(f"\n--- Analyzing Phase {i+1}: {phase_name} (Type: {analysis_type}) ---")
+    data_segments = common_utils.split_data_by_time(
+        clean_df, split_points, time_col=time_standard_name
+    )
 
-            if segment_df.empty:
-                logging.warning(f"Segment for phase '{phase_name}' is empty. Skipping analysis.")
-                processed_data_store[phase_name] = pd.DataFrame()
-                continue
+    # === 5. PHASE-BY-PHASE ANALYSIS (USING REGISTRY) ===
+    processed_data_store: Dict[str, pd.DataFrame] = {}
+    for i, (phase, segment_df) in enumerate(zip(recipe, data_segments)):
+        phase_name, analysis_type = phase["name"], phase["type"]
+        logging.info(f"\n--- Analyzing Phase {i+1}: {phase_name} (Type: {analysis_type}) ---")
 
-            if analysis_type in ANALYSIS_REGISTRY:
-                analysis_func = ANALYSIS_REGISTRY[analysis_type]
-                processed_df = analysis_func(segment_df, final_config["geometry"])
-            else:
-                logging.info(
-                    f"No analysis function registered for type '{analysis_type}'. "
-                    "Passing data through without further processing."
-                )
-                processed_df = segment_df
-            processed_data_store[phase_name] = processed_df
+        if segment_df.empty:
+            logging.warning(f"Segment for phase '{phase_name}' is empty. Skipping analysis.")
+            processed_data_store[phase_name] = pd.DataFrame()
+            continue
 
-        # === 6. PLOT GENERATION ===
-        plot_configs_raw = final_config.get("plots", [])
-        resolved_plot_configs: List[Dict[str, Any]] = []
+        if analysis_type in ANALYSIS_REGISTRY:
+            analysis_func = ANALYSIS_REGISTRY[analysis_type]
+            processed_df = analysis_func(segment_df, final_config["geometry"])
+        else:
+            logging.info(
+                f"No analysis function registered for type '{analysis_type}'. "
+                "Passing data through without further processing."
+            )
+            processed_df = segment_df
+        processed_data_store[phase_name] = processed_df
 
-        for plot_def in plot_configs_raw:
-            if isinstance(plot_def, str):
-                # If it's a string, it's a key for a default plot
-                if plot_def in config_defaults.DEFAULT_PLOTS:
-                    resolved_plot_configs.append(copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_def]))
-                else:
-                    logging.warning(
-                        f"Plot key '{plot_def}' not found in DEFAULT_PLOTS registry. Skipping."
-                    )
-            elif isinstance(plot_def, dict):
-                # If it's a dictionary, it's a custom plot configuration
-                resolved_plot_configs.append(plot_def)
+    # === 6. PLOT GENERATION ===
+    plot_configs_raw = final_config.get("plots", [])
+    resolved_plot_configs: List[Dict[str, Any]] = []
+
+    for plot_def in plot_configs_raw:
+        if isinstance(plot_def, str):
+            # If it's a string, it's a key for a default plot
+            if plot_def in config_defaults.DEFAULT_PLOTS:
+                resolved_plot_configs.append(copy.deepcopy(config_defaults.DEFAULT_PLOTS[plot_def]))
             else:
                 logging.warning(
-                    f"Invalid plot definition type: {type(plot_def)}. "
-                    "Expected string or dict. Skipping."
+                    f"Plot key '{plot_def}' not found in DEFAULT_PLOTS registry. Skipping."
                 )
+        elif isinstance(plot_def, dict):
+            # If it's a dictionary, it's a custom plot configuration
+            resolved_plot_configs.append(plot_def)
+        else:
+            logging.warning(
+                f"Invalid plot definition type: {type(plot_def)}. "
+                "Expected string or dict. Skipping."
+            )
 
-        logging.info(f"\n--- Generating {len(resolved_plot_configs)} requested plot definition(s) ---")
+    logging.info(f"\n--- Generating {len(resolved_plot_configs)} requested plot definition(s) ---")
 
-        # Get all phase names for '*' handling in plot configurations
-        all_phase_names = [phase["name"] for phase in recipe]
+    # Get all phase names for '*' handling in plot configurations
+    all_phase_names = [phase["name"] for phase in recipe]
 
-        for plot_config in resolved_plot_configs:
-            # Ensure 'output_filename' is present for all plots, including custom ones
-            if "output_filename" not in plot_config:
+    for plot_config in resolved_plot_configs:
+        # Ensure 'output_filename' is present for all plots, including custom ones
+        if "output_filename" not in plot_config:
+            logging.warning(
+                f"Plot configuration missing 'output_filename'. Skipping plot: "
+                f"{plot_config.get('title', 'Untitled Plot')}"
+            )
+            continue
+
+        target_phases = plot_config.get("phases", [])
+
+        # Handle '*' for all phases
+        phases_to_iterate = all_phase_names if "*" in target_phases else target_phases
+
+        for phase_name in phases_to_iterate:
+            df_to_plot = processed_data_store.get(phase_name)
+            if df_to_plot is None or df_to_plot.empty:
                 logging.warning(
-                    f"Plot configuration missing 'output_filename'. Skipping plot: "
-                    f"{plot_config.get('title', 'Untitled Plot')}"
+                    f"No data available for phase '{phase_name}' to generate plot "
+                    f"'{plot_config.get('title', 'Untitled')}'."
                 )
                 continue
+            try:
+                # Resolve column names and labels for plotting, handling units
+                x_col_to_plot, x_label = _resolve_column_info(
+                    df_to_plot, plot_config["x_col"], plot_config.get("x_units", "auto")
+                )
+                y_col_to_plot, y_label = _resolve_column_info(
+                    df_to_plot, plot_config["y_col"], plot_config.get("y_units", "auto")
+                )
 
-            target_phases = plot_config.get("phases", [])
+                # Determine plot types (static, animated, or both)
+                plot_types_config = plot_config.get("type", "static")
+                plot_types = (
+                    [plot_types_config]
+                    if isinstance(plot_types_config, str)
+                    else plot_types_config
+                )
 
-            # Handle '*' for all phases
-            phases_to_iterate = all_phase_names if "*" in target_phases else target_phases
+                for plot_type in plot_types:
+                    plot_type = plot_type.lower()
+                    format_keys = {**plot_config, "phase_name": phase_name}
+                    base_filename = plot_config["output_filename"].format(**format_keys)
+                    suffix = ".mp4" if plot_type == "animated" else ".png"
+                    filename = base_filename + suffix
+                    title = plot_config["title"].format(**format_keys)
+                    output_file_path = os.path.join(output_dir, filename)
 
-            for phase_name in phases_to_iterate:
-                df_to_plot = processed_data_store.get(phase_name)
-                if df_to_plot is None or df_to_plot.empty:
-                    logging.warning(
-                        f"No data available for phase '{phase_name}' to generate plot "
-                        f"'{plot_config.get('title', 'Untitled')}'."
-                    )
-                    continue
-                try:
-                    # Resolve column names and labels for plotting, handling units
-                    x_col_to_plot, x_label = _resolve_column_info(
-                        df_to_plot, plot_config["x_col"], plot_config.get("x_units", "auto")
-                    )
-                    y_col_to_plot, y_label = _resolve_column_info(
-                        df_to_plot, plot_config["y_col"], plot_config.get("y_units", "auto")
-                    )
-
-                    # Determine plot types (static, animated, or both)
-                    plot_types_config = plot_config.get("type", "static")
-                    plot_types = (
-                        [plot_types_config]
-                        if isinstance(plot_types_config, str)
-                        else plot_types_config
-                    )
-
-                    for plot_type in plot_types:
-                        plot_type = plot_type.lower()
-                        format_keys = {**plot_config, "phase_name": phase_name}
-                        base_filename = plot_config["output_filename"].format(**format_keys)
-                        suffix = ".mp4" if plot_type == "animated" else ".png"
-                        filename = base_filename + suffix
-                        title = plot_config["title"].format(**format_keys)
-                        output_file_path = os.path.join(output_dir, filename)
-
-                        if plot_type == "animated":
-                            plotting_tools.animate_curve(
-                                df=df_to_plot,
-                                x_col=x_col_to_plot,
-                                y_col=y_col_to_plot,
-                                title=title,
-                                x_label=x_label,
-                                y_label=y_label,
-                                output_path=output_file_path,
-                                **plot_config.get("animation_options", {}),
-                            )
-                        elif plot_type == "static":
-                            # Pass base column names and units for fit calculation
-                            plotting_tools.plot_curve(
-                                df=df_to_plot,
-                                x_col_plot=x_col_to_plot,
-                                y_col_plot=y_col_to_plot,
-                                x_col_base=config_defaults.DATA_COLUMN_REGISTRY[
-                                    plot_config["x_col"].lower()
-                                ]["standard_name"],
-                                y_col_base=config_defaults.DATA_COLUMN_REGISTRY[
-                                    plot_config["y_col"].lower()
-                                ]["standard_name"],
-                                y_base_units=config_defaults.DATA_COLUMN_REGISTRY[
-                                    plot_config["y_col"].lower()
-                                ]["default_units"],
-                                title=title,
-                                x_label=x_label,
-                                y_label=y_label,
-                                output_path=output_file_path,
-                                fit_line=plot_config.get("fit_line", False),
-                                fit_bounds=plot_config.get("fit_bounds"),
-                            )
-                        else:
-                            logging.warning(f"Unknown plot type '{plot_type}'. Skipping.")
-                except (KeyError, ValueError) as e:
-                    logging.warning(
-                        f"Skipping plot '{plot_config.get('title', 'Untitled')}' "
-                        f"for phase '{phase_name}'. Reason: {e}"
-                    )
-        logging.info(f"\nMulti-phase analysis complete. Graphs saved in '{output_dir}'.")
+                    if plot_type == "animated":
+                        plotting_tools.animate_curve(
+                            df=df_to_plot,
+                            x_col=x_col_to_plot,
+                            y_col=y_col_to_plot,
+                            title=title,
+                            x_label=x_label,
+                            y_label=y_label,
+                            output_path=output_file_path,
+                            **plot_config.get("animation_options", {}),
+                        )
+                    elif plot_type == "static":
+                        # Pass base column names and units for fit calculation
+                        plotting_tools.plot_curve(
+                            df=df_to_plot,
+                            x_col_plot=x_col_to_plot,
+                            y_col_plot=y_col_to_plot,
+                            x_col_base=config_defaults.DATA_COLUMN_REGISTRY[
+                                plot_config["x_col"].lower()
+                            ]["standard_name"],
+                            y_col_base=config_defaults.DATA_COLUMN_REGISTRY[
+                                plot_config["y_col"].lower()
+                            ]["standard_name"],
+                            y_base_units=config_defaults.DATA_COLUMN_REGISTRY[
+                                plot_config["y_col"].lower()
+                            ]["default_units"],
+                            title=title,
+                            x_label=x_label,
+                            y_label=y_label,
+                            output_path=output_file_path,
+                            fit_line=plot_config.get("fit_line", False),
+                            fit_bounds=plot_config.get("fit_bounds"),
+                        )
+                    else:
+                        logging.warning(f"Unknown plot type '{plot_type}'. Skipping.")
+            except (KeyError, ValueError) as e:
+                logging.warning(
+                    f"Skipping plot '{plot_config.get('title', 'Untitled')}' "
+                    f"for phase '{phase_name}'. Reason: {e}"
+                )
+    logging.info(f"\nMulti-phase analysis complete. Graphs saved in '{output_dir}'.")
