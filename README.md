@@ -23,17 +23,17 @@ It automates the workflow from:
 matmech/
 │
 ├── __init__.py             # Package initialization
-├── common_utils.py         # Loading and splitting CSV data by time
-├── axial_analysis.py       # Calculates axial stress and strain
-├── torsional_analysis.py   # Calculates shear stress and strain
-├── plotting_tools.py       # Plot and animation generation
-├── config_defaults.py      # Software profiles and column registry
-└── workflow.py             # Main analysis workflow controller
+├── common_utils.py         # General utility functions like data loading and splitting
+├── axial_analysis.py       # Functions for calculating axial material properties
+├── torsional_analysis.py   # Functions for calculating torsional material properties
+├── plotting_tools.py       # Functions for generating static and animated plots
+├── config_defaults.py      # Default configurations and registries for software profiles, data columns, and plot settings
+└── workflow.py             # Orchestrates the entire data analysis process
 ```
 
 ## Installation
 
-To install the `mat-analyzer` package, it is recommended to install it in editable mode within your development environment:
+To install the `matmech` package, it is recommended to install it in editable mode within your development environment:
 
 ```bash
 pip install -e .
@@ -70,7 +70,7 @@ project_root/
 ├── data/
 │   └── my_test_run.csv
 │
-├── mat_analyzer/
+├── matmech/
 │   └── (library modules...)
 │
 └── main.py
@@ -211,7 +211,7 @@ To register a new analysis type:
         # ... implement analysis logic ...
         return df
     ```
-2.  Add it to the registry in `mat_analyzer/workflow.py`:
+2.  Add it to the registry in `matmech/workflow.py`:
     ```python
     ANALYSIS_REGISTRY["NEW_TYPE"] = my_new_analysis
     ```

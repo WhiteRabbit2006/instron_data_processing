@@ -9,7 +9,7 @@ known inputs and expected outputs.
 import numpy as np
 import pandas as pd
 
-from analysis_lib import axial_analysis, config_defaults, torsional_analysis
+from matmech import axial_analysis, config_defaults, torsional_analysis
 
 
 def test_calculate_axial_properties():
