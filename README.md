@@ -43,16 +43,20 @@ This command installs the package in "editable" mode, meaning that changes to th
 
 ### Requirements
 
-The following packages are required and will be installed automatically with `pip install -e .`:
+The core `matmech` library requires the following Python packages, which will be installed automatically:
 *   `pandas`
 *   `numpy`
 *   `matplotlib`
 
-For animations (.mp4 output), `ffmpeg` is required. On Ubuntu/Debian, install it using:
-```bash
-sudo apt install ffmpeg
-```
-On Windows, you can download it from the [FFmpeg website](https://ffmpeg.org/download.html) and add it to your system's PATH.
+**Optional Dependencies:**
+
+*   **Animation Output (`.mp4`):** For generating animated plots, `ffmpeg` is required. This is a system dependency, not a Python package.
+    *   On Ubuntu/Debian, install it using: `sudo apt install ffmpeg`
+    *   On Windows, download it from the [FFmpeg website](https://ffmpeg.org/download.html) and add it to your system's PATH.
+*   **Development/Testing:** For running tests, `pytest` is required. Install it with:
+    ```bash
+    pip install -e ".[dev]"
+    ```
 
 ## How It Works
 

@@ -14,5 +14,9 @@ dependencies = [
     "matplotlib",
 ]
 
+[project.optional-dependencies]
+animation = [] # ffmpeg is a system dependency, not a Python package
+dev = ["pytest"]
+
 [tool.setuptools]
 packages = ["matmech"]

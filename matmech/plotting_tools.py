@@ -38,8 +38,10 @@ def _calculate_axis_limits(
     if data_min == data_max:
         # Handle cases where all data points are identical
         if data_min == 0:
-            return -0.1, 0.1
-        return data_min * 0.9, data_max * 1.1 if data_max > 0 else data_min * 1.1, data_max * 0.9
+            return -0.1, 0.1  # Small range around zero
+        # Provide a small symmetric range around the single value
+        offset = abs(data_min) * 0.1 if data_min != 0 else 0.1
+        return data_min - offset, data_max + offset
 
     data_range = data_max - data_min
     padding = data_range * padding_factor

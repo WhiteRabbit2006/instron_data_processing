@@ -9,7 +9,13 @@ from typing import Any, Dict
 import numpy as np
 import pandas as pd
 
-from matmech import config_defaults
+from matmech.constants import (
+    ROTATION_COL,
+    SHEAR_STRAIN_COL,
+    SHEAR_STRESS_MPA_COL,
+    SHEAR_STRESS_PA_COL,
+    TORQUE_COL,
+)
 
 
 def calculate_torsional_properties_rect(

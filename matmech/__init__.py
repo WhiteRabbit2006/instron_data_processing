@@ -1,6 +1,12 @@
 """
 The `matmech` package provides tools for processing and visualizing
 mechanical test data.
+"""
+
+__version__ = "1.0.0"
+
+"""
+It includes modules for:
 
 It includes modules for:
 - `workflow`: Orchestrates the entire data analysis process.

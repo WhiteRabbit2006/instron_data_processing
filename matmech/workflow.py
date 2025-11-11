@@ -20,6 +20,7 @@ import pandas as pd
 
 # noinspection PyPackages
 from matmech import axial_analysis, common_utils, config_defaults, plotting_tools, torsional_analysis
+from matmech.constants import TIME_COL
 
 # The Analysis Registry: Maps a string from the config to an analysis function.
 # This makes the workflow extensible without modification.
@@ -195,8 +196,8 @@ def run_analysis_workflow(script_path: str, user_config: Dict[str, Any]) -> None
         recipe: List[Dict[str, Any]] = final_config["test_recipe"]
         split_points = [phase["end_time"] for phase in recipe]
 
-        # Get the standard name for the time column from the registry
-        time_standard_name = config_defaults.TIME_COL
+        # Get the standard name for the time column from the constants
+        time_standard_name = TIME_COL
 
         # Defensive check: Ensure the time column exists in clean_df
         if time_standard_name not in clean_df.columns:

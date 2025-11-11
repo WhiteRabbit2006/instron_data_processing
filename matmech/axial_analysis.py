@@ -8,7 +8,13 @@ from typing import Any, Dict
 
 import pandas as pd
 
-from matmech import config_defaults
+from matmech.constants import (
+    AXIAL_STRAIN_COL,
+    AXIAL_STRESS_MPA_COL,
+    AXIAL_STRESS_PA_COL,
+    FORCE_COL,
+    POSITION_COL,
+)
 
 
 def calculate_axial_properties(df: pd.DataFrame, geometry: Dict[str, Any]) -> pd.DataFrame:
