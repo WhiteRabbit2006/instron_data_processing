@@ -1,6 +1,6 @@
 # analysis_lib/workflow.py
 """
-The main workflow orchestration module for the universal-test-analyzer.
+The main workflow orchestration module for the mat-analyzer library.
 
 This module defines the `run_analysis_workflow` function, which serves as the
 primary entry point for processing mechanical test data. It handles:
