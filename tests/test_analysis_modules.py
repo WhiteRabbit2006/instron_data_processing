@@ -386,8 +386,15 @@ def test_run_analysis_workflow_integration(tmp_path):
     # Test error handling for missing geometry for analysis leading to missing plot column
     user_config_missing_geometry = user_config_axial.copy()
     user_config_missing_geometry["geometry"] = {}  # Missing all geometry
+    # Override column_sources to ensure axial_strain is NOT loaded from raw data,
+    # so its calculation depends on geometry, which is missing.
+    user_config_missing_geometry["column_sources"] = {
+        "time": {"raw_col": "Time (s)", "raw_units": "s"},
+        "position": {"raw_col": "Displacement (mm)", "raw_units": "mm"},
+        "force": {"raw_col": "Force (kN)", "raw_units": "kN"},
+        # axial_strain is intentionally omitted here to force calculation via geometry
+    }
     with pytest.raises(KeyError, match=f"Required base column '{AXIAL_STRAIN_COL}' for 'axial_strain' does not exist"):
-        # This will fail during plotting because axial_strain cannot be calculated
         workflow.run_analysis_workflow(str(script_path), user_config_missing_geometry)
 
 
